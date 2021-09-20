@@ -2,16 +2,21 @@ use wasm_bindgen::prelude::*;
 use yew::prelude::*;
 use js_sys::Promise;
 use gloo_console as console;
+use yew::html::Scope;
+use yew::events::MouseEvent;
 
 extern crate web_sys;
 struct Model {
     link: ComponentLink<Self>,
     value: i64,
     sounds: web_sys::HtmlAudioElement,
+    src: String,
 }
 
 enum Msg {
     AddOne,
+    Change,
+    Back,
 }
 
 
@@ -19,12 +24,14 @@ impl Component for Model {
     type Message = Msg;
     type Properties = ();
     fn create(_: Self::Properties, link: ComponentLink<Self>) -> Self {
-        let sounds = web_sys::HtmlAudioElement::new_with_src("../pop.wav").expect("");
+        let sounds = web_sys::HtmlAudioElement::new_with_src("./pop.wav").expect("");
+        let img_src = "./popcat1.png".to_string();
         console::log!("ok");
         Self {
             link,
             value: 0,
             sounds,
+            src: img_src,
         }
     }
     fn update(&mut self, msg: Self::Message) -> ShouldRender {
@@ -36,6 +43,14 @@ impl Component for Model {
                 console::log!("add one and has sounds");
                 true
             }
+            Msg::Change => {
+                self.src = "./popcat2.png".to_string();
+                true
+            }
+            Msg::Back => {
+                self.src = "./popcat1.png".to_string();
+                true
+            }
         }
     }
 
@@ -44,15 +59,32 @@ impl Component for Model {
     }
 
     fn view(&self) -> Html {
+        let mouse_down = {
+            Callback::from(move |event: yew::MouseEvent| {
+                console::log!("change");
+                Msg::Change;
+            })
+        };
+        let mouse_up = {
+            Callback::from(move |event: yew::MouseEvent| {
+                console::log!("change back");
+                Msg::Back;
+            })
+        };
         html! {
             <div class="container">
                 <h1>{ "POPCAT" }</h1>
                 <p>{ "score:" }{ self.value }</p>
-                <button onclick=self.link.callback(|_| Msg::AddOne)>{ "+1" }</button>
+                <img src={ self.src }
+                    onmousedown=mouse_down
+                    onmouseup=mouse_up
+                    onclick=self.link.callback(|_| Msg::AddOne)/>
             </div>
         }
     }
 }
+
+
 
 #[wasm_bindgen(start)]
 pub fn run_app() {
