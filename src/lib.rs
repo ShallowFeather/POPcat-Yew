@@ -44,7 +44,9 @@ impl Component for Model {
                 true
             }
             Msg::Change => {
+                console::log!("aaa");
                 self.src = "./popcat2.png".to_string();
+                console::log!("aaa");
                 true
             }
             Msg::Back => {
@@ -59,26 +61,16 @@ impl Component for Model {
     }
 
     fn view(&self) -> Html {
-        let mouse_down = {
-            Callback::from(move |event: yew::MouseEvent| {
-                console::log!("change");
-                Msg::Change;
-            })
-        };
-        let mouse_up = {
-            Callback::from(move |event: yew::MouseEvent| {
-                console::log!("change back");
-                Msg::Back;
-            })
-        };
         html! {
             <div class="container">
                 <h1>{ "POPCAT" }</h1>
                 <p>{ "score:" }{ self.value }</p>
-                <img src={ self.src }
-                    onmousedown=mouse_down
-                    onmouseup=mouse_up
-                    onclick=self.link.callback(|_| Msg::AddOne)/>
+                <img src={ self.src.clone() }
+                    onmousedown=self.link.callback(|_| Msg::Change)
+                    onmouseup=self.link.callback(|_| Msg::Back)
+                    onclick=self.link.callback(|_| Msg::AddOne)
+                    height="600px"
+                />
             </div>
         }
     }
