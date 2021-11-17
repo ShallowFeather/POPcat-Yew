@@ -1,0 +1,24 @@
+body {
+    margin: 0%;
+    padding: 0%;
+    background-color: #bdaa90;
+}
+.container{
+    text-align: center;
+}
+
+h1 {
+    font-size: 6.5em;
+    margin: 1% 0% -3% 0%;
+    font-family: Nunito, sans-serif;
+    -webkit-text-stroke: 2px black;
+    color: white;
+}
+
+p {
+    font-size: 4em;
+    font-family: Nunito, sans-serif;
+    -webkit-text-stroke: 2px black;
+    color: white;
+    margin-bottom: -4%;
+}
